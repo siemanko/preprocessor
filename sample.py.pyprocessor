@@ -1,0 +1,13 @@
+pyp
+from sample_utils import typed_expression
+endpyp
+
+cdef class Mat:
+    cdef CMat[dtype] matinternal
+    int dtype
+
+    def sum(Mat self):
+        pyp:typed_expression(pyp, "self.matinternal", "CMat",
+            print('siema')
+            return WrapMat(TYPED_EXPRESSION.sum())
+        endpyp
