@@ -6,12 +6,13 @@ def readfile(fname):
 
 setup(
     name='preprocessor',
-    version='1.0.0',
+    version='1.0.5',
     description='Preprocessor for files.',
     long_description=readfile('README.md'),
     ext_modules=[],
     packages=find_packages(),
     py_modules = [],
+    scripts=['scripts/preprocessor'],
     author='Szymon Sidor',
     author_email='szymon.sidor@gmail.com',
     url='https://github.com/nivwusquorum/preprocessor',

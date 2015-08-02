@@ -1,0 +1,19 @@
+pyp
+from sample_utils import typed_expression
+endpyp
+
+cdef class Mat:
+    cdef CMat[dtype] matinternal
+    int dtype
+
+    def sum(Mat self):
+        # Inline preprcoessor expression. Executes a function.
+        # Generally inline expressions should be one line,
+        # But can be extended to multiple where all the data
+        # on second line and following will be captured into
+        # a string argument passed as last positional argument
+        # to a function
+        pyp:typed_expression(pyp, "self.matinternal", "CMat",
+            print('siema')
+            return WrapMat(TYPED_EXPRESSION.sum())
+        endpyp
