@@ -51,7 +51,7 @@ def process_inline_snippet(code, prefix, suffix):
     else:
         return indentation, function
 
-def process_source(pyp_source, prefix="pyp", suffix = "endpyp"):
+def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
     if suffix is None:
         suffix = prefix
 

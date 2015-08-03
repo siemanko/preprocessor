@@ -8,7 +8,7 @@ Here's a small file where we replicate the same Cython code 3 times - once for e
 ```Python
 pyp
 from sample_utils import typed_expression
-endpyp
+ypy
 
 cdef class Mat:
     cdef CMat[dtype] matinternal
@@ -24,7 +24,7 @@ cdef class Mat:
         pyp:typed_expression(pyp, "self.matinternal", "CMat",
             print('siema')
             return WrapMat(TYPED_EXPRESSION.sum())
-        endpyp
+        ypy
 ```
 
 The output of the preprocessed file looks like this:
