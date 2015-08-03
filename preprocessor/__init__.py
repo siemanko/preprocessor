@@ -99,7 +99,7 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
     return modified_source
 
 
-def process_file(pyp_filepath, prefix="pyp", suffix = "endpyp"):
+def process_file(pyp_filepath, prefix="pyp", suffix = "ypy"):
     with open(pyp_filepath) as pyp_f:
         pyp_source = pyp_f.read()
     return process_source(pyp_source, prefix=prefix, suffix=suffix)
