@@ -3,6 +3,16 @@ import sys
 
 from collections import namedtuple
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class PyProcessorCapture(object):
     def __init__(self, default_indent=0):
         self.default_indent = default_indent
@@ -42,7 +52,7 @@ def process_snippet(code, prefix, suffix):
 def process_inline_snippet(code, prefix, suffix):
     lines = code.split('\n')
     indentation = lines[0].index(prefix)
-    function = lines[0][indentation + len(prefix) + 1:]
+    function = lines[0][indentation + len(prefix) + len("inline") + 1:]
     if len(lines) > 2:
         lines = [line[indentation:] for line in lines[1:-1]]
 
@@ -56,7 +66,7 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
         suffix = prefix
 
     pyp_pattern = re.compile(r'(?!\n)\ *(?s)' + prefix + r'\s.*?' + suffix, re.MULTILINE)
-    pyp_inline_pattern = re.compile(r'(^|(?!\n))\ *(?s)' + prefix + r':.*?' + suffix, re.MULTILINE)
+    pyp_inline_pattern = re.compile(r'(^|(?!\n))\ *(?s)' + prefix + r'inline\s.*?' + suffix, re.MULTILINE)
 
     pyp_snippets = []
     for match in pyp_pattern.finditer(pyp_source):
@@ -87,7 +97,12 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
     for i, snippet in enumerate(pyp_snippets):
         pyp.reset()
         pyp.default_indent = snippet.indentation
-        exec(snippet.code, variable_space)
+        try:
+            exec(snippet.code, variable_space)
+        except Exception as e:
+            print("Exception executing snippet: ", e)
+            print(bcolors.FAIL + snippet.code + bcolors.ENDC)
+
 
         modified_source = modified_source + pyp_source[last_end:snippet.position]
         last_end = snippet.position + snippet.length

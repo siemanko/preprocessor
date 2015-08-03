@@ -21,7 +21,7 @@ cdef class Mat:
         # on second line and following will be captured into
         # a string argument passed as last positional argument
         # to a function
-        pyp:typed_expression(pyp, "self.matinternal", "CMat",
+        pypinline typed_expression(pyp, "self.matinternal", "CMat",
             print('siema')
             return WrapMat(TYPED_EXPRESSION.sum())
         ypy
