@@ -17,3 +17,16 @@ cdef class Mat:
             print('siema')
             return WrapMat(TYPED_EXPRESSION.sum())
         ypy
+
+
+pyprepeat OP_NAME in ['square', 'log', 'exp']
+    @staticmethod
+    def OP_NAME(Mat mat):
+        pypinline type_repeat(pyp,
+        cdef CMat[TYPE_NAME] TYPED(out)
+        ypy
+        pypinline typed_expression(pyp, "self.matinternal", "CMat",
+            print('OP_NAME')
+            return WrapMat(TYPED_EXPRESSION.sum())
+        ypy
+ypyrepeat

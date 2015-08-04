@@ -6,7 +6,7 @@ def readfile(fname):
 
 setup(
     name='preprocessor',
-    version='1.0.9',
+    version='1.1.0',
     description='Preprocessor for files.',
     long_description=readfile('README.md'),
     ext_modules=[],

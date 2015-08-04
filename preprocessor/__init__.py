@@ -41,6 +41,58 @@ class PyProcessorCapture(object):
 Snippet = namedtuple("Snippet", ["position", "length", "code", "indentation"])
 
 
+def process_repeat_statements(code, prefix='pyp', suffix='ypy'):
+    lines = code.split('\n')
+
+    NORMAL = 1
+    REPEAT = 2
+
+    output = []
+    buff = None
+    mode = NORMAL
+
+    prefix = prefix + 'repeat'
+    suffix = suffix + 'repeat'
+
+    to_be_replaced = None
+    replacement_values = None
+
+
+    for line in lines:
+        if line.startswith(prefix):
+            assert mode == NORMAL
+            splitted = [ t for t in line.split(' ') if t != '']
+            assert splitted[0] == prefix
+            to_be_replaced = splitted[1]
+            assert splitted[2] == 'in'
+            expression = ' '.join(splitted[3:])
+            replacement_values = eval(expression)
+            assert type(replacement_values) == list
+            for val in replacement_values:
+                assert type(val) == str
+            buff = []
+            mode = REPEAT
+        elif line.startswith(suffix):
+            assert mode == REPEAT
+
+            for val in replacement_values:
+                for line in buff:
+                    output.append(line.replace(to_be_replaced, val))
+            buff               = None
+            to_be_replaced     = None
+            replacement_values = None
+            mode               = NORMAL
+        else:
+            if mode == NORMAL:
+                output.append(line)
+            elif mode == REPEAT:
+                buff.append(line)
+    assert mode == NORMAL, "Unfinished REPEAT statement business."
+
+    return '\n'.join(output)
+
+
+
 def process_snippet(code, prefix, suffix):
     lines = code.split('\n')
     indentation = lines[0].index(prefix)
@@ -62,8 +114,9 @@ def process_inline_snippet(code, prefix, suffix):
         return indentation, function
 
 def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
-    if suffix is None:
-        suffix = prefix
+    assert not prefix in suffix and not suffix in prefix
+
+    pyp_source = process_repeat_statements(pyp_source)
 
     pyp_pattern = re.compile(r'(?!\n)\ *(?s)' + prefix + r'\s.*?' + suffix, re.MULTILINE)
     pyp_inline_pattern = re.compile(r'(^|(?!\n))\ *(?s)' + prefix + r'inline\s.*?' + suffix, re.MULTILINE)
