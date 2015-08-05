@@ -157,8 +157,10 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
             print("Exception executing snippet: ", e)
             print(bcolors.FAIL)
             print(snippet.code)
-            traceback.print_exc()
             print(bcolors.ENDC)
+            print('=== STACK TRACE ===')
+            traceback.print_exc()
+            print('===================')
 
         modified_source = modified_source + pyp_source[last_end:snippet.position]
         last_end = snippet.position + snippet.length
