@@ -1,5 +1,6 @@
 import re
 import sys
+import traceback
 
 from collections import namedtuple
 
@@ -154,8 +155,10 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
             exec(snippet.code, variable_space)
         except Exception as e:
             print("Exception executing snippet: ", e)
-            print(bcolors.FAIL + snippet.code + bcolors.ENDC)
-
+            print(bcolors.FAIL)
+            print(snippet.code)
+            traceback.print_exc()
+            print(bcolors.ENDC)
 
         modified_source = modified_source + pyp_source[last_end:snippet.position]
         last_end = snippet.position + snippet.length
