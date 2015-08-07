@@ -98,7 +98,7 @@ def process_snippet(code, prefix, suffix):
     lines = code.split('\n')
     indentation = lines[0].index(prefix)
     for i in range(len(lines)):
-        lines[i] = lines[i][indentation:]
+            lines[i] = lines[i][indentation:]
 
     return indentation, '\n'.join(lines[1:-1])
 
@@ -148,12 +148,15 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
 
     modified_source = ''
 
+    encountered_error = False
+
     for i, snippet in enumerate(pyp_snippets):
         pyp.reset()
         pyp.default_indent = snippet.indentation
         try:
             exec(snippet.code, variable_space)
         except Exception as e:
+            encountered_error = True
             print("Exception executing snippet: ", e)
             print(bcolors.FAIL)
             print(snippet.code)
@@ -168,6 +171,9 @@ def process_source(pyp_source, prefix="pyp", suffix = "ypy"):
         modified_source = modified_source + pyp.get()
 
     modified_source = modified_source + pyp_source[last_end:]
+
+    if encountered_error:
+        raise Exception("Error while executing preprocessor")
 
     return modified_source
 
